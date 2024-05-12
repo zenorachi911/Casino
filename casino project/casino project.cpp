@@ -150,6 +150,8 @@ public:
         }
 
         cout << "What game do you want to play?\n";
+        
+        
 
         cout << "\t\t\t-------------------------------------\n"
             "\t\t\t| 1. Roulette(in development)       |\n"
