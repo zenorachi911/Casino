@@ -1,19 +1,19 @@
-﻿#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+﻿#include "header.h"
 
-using namespace std;
-//Реализовать класс Menu
-//system("cls") - для обновления текста в консоли
-// Узнать имя пользователя, который будет играть
+class Roulette;
+
+class Games;
 
 class Menu;
 
-class Chips 
+class Bets;
+
+class Chips
 {
 private:
+    friend Roulette;
     friend Menu;
+
    enum chipses
     {
         white = 1,
@@ -29,18 +29,16 @@ private:
 
     int quantity;
 
-    vector<pair<string, int>> chipscol{}; 
-
     int col;
 
     string moneysleft;
 
+
+protected:
+    vector<pair<string, int>> chipscol{}; 
+
 public:
 
-    int Getmoneys()
-    {
-        return this->moneys;
-    }
 
     int chipschange() {
         cin >> moneys;
@@ -115,7 +113,7 @@ public:
         }
     }
 
-    private: int getValue(const string& chipType);
+    int getValue(const string& chipType);
 
 };
 
@@ -129,79 +127,195 @@ int Chips::getValue(const string& chipType) {
     else if (chipType == "orange") return orange;
     else return 0;
 }
-//Надо сделать обновялемый текст в консоли
-//Сделать Блэкджэк и рулетку
-// Реализовать приветсиве в этих играх
+
 
 class Menu
 {
 private:
     int choise;
-
+    
+    string name;
+    
 public:
-    int menu(Chips &chips)
+    int menu(Chips& chips, Roulette& a) 
     {
-
+        
         if (chips.chipscol.empty())
         {
             cout << "See you soon" << endl;
             return 0;
             
         }
-
-        cout << "What game do you want to play?\n";
-        
-        
-
-        cout << "\t\t\t-------------------------------------\n"
-            "\t\t\t| 1. Roulette(in development)       |\n"
-            "\t\t\t| 2. Black Jack(in development)     |\n"
-            "\t\t\t| 3. Exit                           |\n"
-            "\t\t\t-------------------------------------\n";
-        
-        cin >> choise;
-
-        switch (choise)
-        {
-        case(1):
+       
+        while (1)
         {
 
-        }
-        case(2):
-        {
+            cout << "What game do you want to play?\n";
 
-        }
-        case(3):
-        {
-            /*cout << "See you soon" << endl;
-            return 0;
-            system("cls");*/
-        }
-        default:
-        {
-            cout << "Unknown command" << endl;
-        }
+
+
+            cout << "\t\t\t-------------------------------------\n"
+                "\t\t\t| 1. Roulette(in development)       |\n"
+                "\t\t\t| 2. Black Jack(in development)     |\n"
+                "\t\t\t| 3. Exit                           |\n"
+                "\t\t\t-------------------------------------\n";
+
+            cin >> choise;
+            system("cls");
+
+            switch (choise)
+            {
+            case(1):
+            {
+               
+                break;
+            }
+            case(2):
+            {
+
+                break;
+            }
+            case(3):
+            {
+                cout << "See you soon" << endl;
+
+                exit(0);
+                break;
+            }
+            default:
+            {
+                cout << "Unknown command" << endl;
+                system("PAUSE");
+                system("cls");
+            }
+
+            }
         }
 
     }
+
+    void startmsg()
+    { 
+
+        cout << "\t\t\t            $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n"
+            "\t\t\t           $    wellcome to the casino     $\n"
+            "\t\t\t            $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n\n";
+
+        cout << "How should I address you?" << endl;
+
+        bool test = true;
+       
+        while (test)
+        {
+
+            cin >> name;
+
+            for (char iter : name)
+            {
+
+                if (isalpha(iter))
+                {
+                    test = false;
+
+                }    
+            }
+            if (test) 
+            {
+                cout << "Name, not a phone number" << endl;
+                
+            }
+        }
+       
+        system("cls");
+
+        cout << name <<" Hello, How much do you want to exchange for chips?" << endl;
+    }
+
 };
 
-int main() {
+
+class Roulette 
+{
+private:
+    
+    class Bets
+    {
+    public:
+
+        void inter()
+        {
+            cout <<
+                " __________________________________________________\n"
+                "/                                                  \\\n"
+                "|                                                   |\n"
+                "|      | 3 6 9 12 |15 18 21 24|27 30 33 36|         |\n"
+                "|    0 | 2 5 8 11 |14 17 20 23|26 29 32 35|         |\n"
+                "|      | 1 4 7 10 |13 16 19 22|25 28 31 34|         |\n"
+                "|   _____________________________________________   |\n"
+                "|  |   |  1st 12  |  2nd 12   |   3d 12   |      |  |\n"
+                "|  |___|__________|___________|___________|______|  |\n"
+                "|  | 1 to 18| EVEN | red | black | ODD | 19 to 36|  |\n"
+                "|  |________|______|_____|_______|_____|_________|  |\n"
+                "|                                                   |\n"
+                "|___________________________________________________|\n"
+                "\n";
+
+        }
+    };
+
+public:
+
+    void Game(Chips& a)
+    {
+        
+        Bets roulette;
+        roulette.inter();
+
+        cout << "Where do you want to put it?" << endl;
+        
+        short bet;
+        short col;
+        cin >> col >> bet;
+      
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dis(0, 1);
+        
+        if (bet == dis(gen))
+        {
+            cout << "You win!!" << endl;
+
+        }
+        else
+        {
+            cout << "You lose" << endl;
+           
+
+           
+        }
+        cout << dis(gen) << endl;
+    }
+
+    
+};
+
+int main() 
+{
     setlocale(LC_ALL, "RU");
 
-    cout << "Welcome to the casino! " << endl;
+    Roulette a;
 
-    cout << "How much do you want to exchange for chips?" << endl;
-    
     Menu console;
 
     Chips casino;
 
+    console.startmsg();
 
     casino.chipschange();
 
-    console.menu(casino);
-    
+    /*console.menu(casino, a);*/
+
+    a.Game(casino);
     string chipbalance;
     cin >> chipbalance;
 
@@ -209,7 +323,7 @@ int main() {
         casino.GetChips();
         cout << endl;
     }
+
     
-   
-    return 0;
+    
 }

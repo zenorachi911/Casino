@@ -1,3 +1,2 @@
 ﻿  casino project.cpp
-C:\Users\fuzzi\source\repos\casino project\casino project.cpp(184,1): warning C4715: Menu::menu: значение возвращается не при всех путях выполнения
-  casino project.vcxproj -> C:\Users\fuzzi\source\repos\casino project\x64\Debug\casino project.exe
+  casino project.vcxproj -> C:\Users\fuzzi\source\My project\casino project\x64\Debug\casino project.exe
