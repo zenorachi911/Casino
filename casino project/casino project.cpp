@@ -262,7 +262,7 @@ private:
 
         }
     };
-
+    
 public:
 
     void Game(Chips& a)
@@ -277,9 +277,11 @@ public:
         short col;
         cin >> col >> bet;
       
+       /* auto res = find_if(a.chipscol.begin(), a.chipscol.end(), [bet](auto& ex) {return ex.first }); */
+
         random_device rd;
         mt19937 gen(rd());
-        uniform_int_distribution<> dis(0, 1);
+        uniform_int_distribution<> dis(0, 36);
         
         if (bet == dis(gen))
         {
@@ -289,10 +291,16 @@ public:
         else
         {
             cout << "You lose" << endl;
-           
+            /*chipscol.el.second - col;
+            if chipscol.el.second == 0;
+                chipscol.el.first del;*/
 
-           
+
+            
+            auto iter{ std::remove_if(begin(a.chipscol), end(a.chipscol), [](const auto& ex) {return ex.second; }) };
+            a.chipscol.erase(iter, end(a.chipscol));
         }
+        
         cout << dis(gen) << endl;
     }
 

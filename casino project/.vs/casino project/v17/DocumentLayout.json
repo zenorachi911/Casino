@@ -31,8 +31,7 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-05-18T11:29:59.487Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -42,7 +41,7 @@
               "RelativeDocumentMoniker": "casino project.cpp",
               "ToolTip": "C:\\Users\\fuzzi\\source\\My project\\casino project\\casino project.cpp",
               "RelativeToolTip": "casino project.cpp",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABQAAAASAAAA",
+              "ViewState": "AQIAABoBAAAAAAAAAAAvwC4BAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-24T19:31:36.614Z",
               "IsPinned": true,
