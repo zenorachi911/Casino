@@ -39,6 +39,13 @@ protected:
 
 public:
 
+    auto operator () (string &b)
+    {
+        Chips a;
+        for (auto& ex : a.chipscol)
+            return ex.first == b;
+    }
+
 
     int chipschange() {
         cin >> moneys;
@@ -234,10 +241,10 @@ public:
 };
 
 
-class Roulette 
+class Roulette
 {
 private:
-    
+
     class Bets
     {
     public:
@@ -262,54 +269,76 @@ private:
 
         }
     };
-    
+
 public:
 
     void Game(Chips& a)
     {
-        
+
         Bets roulette;
         roulette.inter();
 
-        cout << "Where do you want to put it?" << endl;
-        
+
+
         short bet;
         short col;
-        cin >> col >> bet;
-      
-       /* auto res = find_if(a.chipscol.begin(), a.chipscol.end(), [bet](auto& ex) {return ex.first }); */
+        string chip;
+
+        cout << "Сколько хотите поставить?" << endl;
+
+        cin >> col >> chip;
+
+        cout << "Where do you want to put it?" << endl;
+
+        cin >> bet;
+
 
         random_device rd;
         mt19937 gen(rd());
         uniform_int_distribution<> dis(0, 36);
-        
+
+
+
         if (bet == dis(gen))
         {
-            cout << "You win!!" << endl;
-
+            for (auto& ex : a.chipscol)
+            {
+                cout << "You win!!" << endl;
+                if (ex.first == chip)
+                {
+                    ex.second += ex.second * 35;
+                }
+            }
         }
         else
         {
             cout << "You lose" << endl;
-            /*chipscol.el.second - col;
-            if chipscol.el.second == 0;
-                chipscol.el.first del;*/
+            for (auto& ex : a.chipscol)
+            {
 
+                if (ex.first == chip)
+                {
+                    ex.second -= col;
+                }
+                
+            }
 
-            
-            auto iter{ std::remove_if(begin(a.chipscol), end(a.chipscol), [](const auto& ex) {return ex.second; }) };
-            a.chipscol.erase(iter, end(a.chipscol));
+            cout << dis(gen) << endl;
         }
-        
-        cout << dis(gen) << endl;
     }
 
-    
 };
+
+    
+
+
+
 
 int main() 
 {
     setlocale(LC_ALL, "RU");
+
+    
 
     Roulette a;
 
@@ -321,9 +350,11 @@ int main()
 
     casino.chipschange();
 
+
     /*console.menu(casino, a);*/
 
     a.Game(casino);
+
     string chipbalance;
     cin >> chipbalance;
 
