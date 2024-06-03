@@ -1,20 +1,19 @@
 ﻿#include "header.h"
 
-
-
-class Games;
-
 class Menu;
 
 class Bets;
 
 class Roulette;
 
+class BlackJack;
+
 class Chips
 {
 private:
     friend Roulette;
     friend Menu;
+    friend BlackJack;
 
    enum chipses
     {
@@ -164,7 +163,7 @@ private:
 
 public:
 
-    void Game(Chips& chipsvalue)
+    int Game(Chips& chipsvalue)
     {
 
         Bets roulette;
@@ -174,7 +173,7 @@ public:
 
         short bet{};
         string chip;
-        
+
         string betcolor;
 
         short col;
@@ -184,16 +183,29 @@ public:
         uniform_int_distribution<> dis(0, 36);
 
         const int res = dis(gen);
-            
+
+        cout << "Введите кол-во фишек и ставку" << endl;
+        cin >> col >> chip;
+
+        for (auto& it : chipsvalue.chipscol)
+        {
+            if (it.first != chip)
+            {
+                cout << "Uknown Type Of Chips" << endl;
+                system("pause");
+                system("cls");
+
+                return 0;
+            }
+        }
+
         cout << "1 - Ставка на любое число" << endl;
         cout << "2 - Ставка на красное / черное" << endl;
         cout << "3 - Сатвка на чет / нечет" << endl;
         cout << "4 - Ставка на ряды" << endl;
+        cout << "5 - Ставка на половину" << endl;
 
         cin >> betchoose;
-
-        cout << "Введите кол-во фишек и ставку" << endl;
-        cin >> col >> chip;
 
         switch (betchoose)
         {
@@ -208,11 +220,15 @@ public:
             {
                 for (auto& ex : chipsvalue.chipscol)
                 {
+
                     if (ex.first == chip)
-                        ex.second *= 35;
- 
+                    {
+                        ex.second -= col;
+                        ex.second += (col * 35);
+                    }
+
                 }
-                cout << "Вы выиграли!" << endl;
+                cout << "You Win - " << col * 35 << endl;
             }
             else
             {
@@ -220,66 +236,77 @@ public:
                 {
                     if (ex.first == chip)
                         ex.second -= col;
+                    if (ex.second == 0)
+                        erase(chipsvalue.chipscol, ex);
                 }
-                cout << "You Lose :(" << endl;
+                cout << "You Lose - " << col << endl;
             }
-            
+
             break;
         }
         case(2):
         {
-            int red[18] = { 1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36 };
-            int black[18] = { 2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35 };
-            
             cout << "red or black?" << endl;
 
             cin >> betcolor;
 
             if (betcolor == "red")
             {
-
-                for (int i = 0; i < size(red); i++)
+                if (res == 1 || res == 3 || res == 5 || res == 7 || res == 9 || res == 12 ||
+                    res == 14 || res == 16 || res == 18 || res == 19 || res == 21 || res == 23 ||
+                    res == 25 || res == 27 || res == 30 || res == 32 || res == 34 || res == 36)
                 {
-                    if (res == red[i])
+                    for (auto& ex : chipsvalue.chipscol)
                     {
-                        for (auto& ex : chipsvalue.chipscol)
+                        if (ex.first == chip)
                         {
-                            if (ex.first == chip)
-                                ex.second *= 2;
-
+                            ex.second -= col;
+                            ex.second += (col * 2);
                         }
-                        cout << "You Win!!!" << endl;
                     }
-                    
+                    cout << "You Win - " << col * 2 << endl;
+                }
+                else
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
                 }
 
             }
             else if (betcolor == "black")
             {
-                for (int i = 0; i < size(black); i++)
+                if (res == 2 || res == 4 || res == 6 || res == 8 || res == 10 || res == 11 ||
+                    res == 13 || res == 15 || res == 17 || res == 20 || res == 22 || res == 24 ||
+                    res == 26 || res == 28 || res == 29 || res == 31 || res == 33 || res == 35)
                 {
-                    if (res == black[i])
+                    for (auto& ex : chipsvalue.chipscol)
                     {
-                        for (auto& ex : chipsvalue.chipscol)
+                        if (ex.first == chip)
                         {
-                            if (ex.first == chip)
-                                ex.second *= 2;
+                            ex.second -= col;
+                            ex.second += (col * 2);
                         }
-                        cout << "You Win!!!" << endl;
                     }
-                    
+                    cout << "You Win - " << col * 2 << endl;
                 }
-            }
-            else
-            {
-                for (auto& ex : chipsvalue.chipscol)
+                else
                 {
-                    if (ex.first == chip)
-                        ex.second -= col;
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
                 }
-                cout << "You Lose :(" << endl;
             }
-            
             break;
         }
         case(3):
@@ -289,15 +316,29 @@ public:
 
             if (betcolor == "even")
             {
-                
+
                 if (res % 2 == 0)
                 {
                     for (auto& ex : chipsvalue.chipscol)
                     {
                         if (ex.first == chip)
-                            ex.second *= 2;
+                        {
+                            ex.second -= col;
+                            ex.second += (col * 2);
+                        }
                     }
-                    cout << "You Win!!!" << endl;
+                    cout << "You Win - " << col * 2 << endl;
+                }
+                else
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
                 }
             }
             else if (betcolor == "odd")
@@ -307,21 +348,27 @@ public:
                     for (auto& ex : chipsvalue.chipscol)
                     {
                         if (ex.first == chip)
-                            ex.second *= 2;
+                        {
+                            ex.second -= col;
+                            ex.second += (col * 2);
+                        }
                     }
-                    cout << "You Win!!!" << endl;
+                    cout << "You Win - " << col * 2 << endl;
                 }
-            }
-            else
-            {
-                for (auto& ex : chipsvalue.chipscol)
+                else
                 {
-                    if (ex.first == chip)
-                        ex.second -= col;
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
                 }
-                cout << "You Lose :(" << endl;
             }
-            
+
+
             break;
         }
         case(4):
@@ -336,9 +383,23 @@ public:
                     for (auto& ex : chipsvalue.chipscol)
                     {
                         if (ex.first == chip)
-                            ex.second *= 3;
+                        {
+                            ex.second -= col;
+                            ex.second += (col * 3);
+                        }
                     }
-                    cout << "You Win!!!" << endl;
+                    cout << "You Win - " << col * 3 << endl;
+                }
+                else
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
                 }
             }
             else if (betcolor == "2nd")
@@ -348,9 +409,23 @@ public:
                     for (auto& ex : chipsvalue.chipscol)
                     {
                         if (ex.first == chip)
-                            ex.second *= 3;
+                        {
+                            ex.second -= col;
+                            ex.second += (col * 3);
+                        }
                     }
-                    cout << "You Win!!!" << endl;
+                    cout << "You Win - " << col * 3 << endl;
+                }
+                else
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
                 }
             }
             else if (betcolor == "3d")
@@ -360,29 +435,314 @@ public:
                     for (auto& ex : chipsvalue.chipscol)
                     {
                         if (ex.first == chip)
-                            ex.second *= 3;
+                        {
+                            ex.second -= col;
+                            ex.second += (col * 3);
+                        }
                     }
-                    cout << "You Win!!!" << endl;
+                    cout << "You Win - " << col * 3 << endl;
                 }
-                
-            }
-            else
-            {
-                for (auto& ex : chipsvalue.chipscol)
+                else
                 {
-                    if (ex.first == chip)
-                        ex.second -= col;
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
                 }
-                cout << "You Lose :(" << endl;
+
             }
-            
+
+
             break;
+        }
+        case (5):
+        {
+            cout << "1to18 or 19to36?" << endl;
+            cin >> betcolor;
+
+            if (betcolor == "1to18")
+            {
+                if (res > 0 && res < 19)
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                        {
+                            ex.second -= col;
+                            ex.second += (col * 2);
+                        }
+                    }
+                    cout << "You Win - " << col * 2 << endl;
+                }
+                else
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
+                }
+
+            }
+            else if (betcolor == "19to36")
+            {
+                if (res > 18 && res < 37)
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                        {
+                            ex.second -= col;
+                            ex.second += (col * 2);
+                        }
+                    }
+                    cout << "You Win - " << col * 2 << endl;
+                }
+                else
+                {
+                    for (auto& ex : chipsvalue.chipscol)
+                    {
+                        if (ex.first == chip)
+                            ex.second -= col;
+                        if (ex.second == 0)
+                            erase(chipsvalue.chipscol, ex);
+                    }
+                    cout << "You Lose - " << col << endl;
+                }
+            }
+        }
+        default:
+        {
+            cout << "Uknown bet" << endl;
         }
         }
         system("pause");
         system("cls");
     }
+};
+
+class BlackJack
+{
+
+private:
+
+    class Cardshand
+    {
+    protected:
+        
+        string cards[54];
+    public:
+        
+
+        void cardsinit() {
+            short rank[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13 };
+            short suit[] = { 0,1,2,3 };//0 - pika 1 - cherva 2 - kresti 3 - buba
+            int i = 0;
+            for (int rank = 1; rank <= 13; rank++) {
+                for (int suit = 0; suit <= 3; suit++) {
+                    i++;
+                    string strrank = to_string(rank);
+                    string strsuit = to_string(suit);
+                    cards[i] = strrank + strsuit;
+                }
+            }
+        }
+
     };
+
+    class Player : public Cardshand
+    {
+    public:
+        int playercards() {
+            string choise;
+            int cardrank, cardsuit, playerCardSum = 0;
+            cardsinit();
+            cout << "\nPlayer cards: ";
+        restart:
+            while (true) {
+                random_device rd;
+                mt19937 gen(rd());
+                uniform_int_distribution<> dis(0, 54);
+
+                const auto randvalue = dis(gen);
+
+                cardrank = stoi(cards[randvalue]) / 10;
+                cardsuit = stoi(cards[randvalue]) % 10;
+                cout << "[";
+                switch (cardrank)
+                {
+                case 0: goto restart;
+                case 1: cout << "Ace"; break;
+                case 2: cout << "2"; break;
+                case 3: cout << "3"; break;
+                case 4: cout << "4"; break;
+                case 5: cout << "5"; break;
+                case 6: cout << "6"; break;
+                case 7: cout << "7"; break;
+                case 8: cout << "8"; break;
+                case 9: cout << "9"; break;
+                case 10: cout << "10"; break;
+                case 11: cout << "Jack"; break;
+                case 12: cout << "Qween"; break;
+                case 13: cout << "King"; break;
+                default: break;
+                }
+                switch (cardsuit)
+                {
+                case 0: cout << " Spades"; break;
+                case 1: cout << " Hearts"; break;
+                case 2: cout << " Clubs"; break;
+                case 3: cout << " Diamonds"; break;
+                default: break;
+                }
+                playerCardSum += cardrank;
+                if (playerCardSum > 21) {
+                    cout << "], Sum: " << playerCardSum;
+                    playerCardSum = 0;
+                    break;
+                }
+                cout << "], Sum = " << playerCardSum;
+                cout << "\nDo you want more card? (y/n)\n";
+                cin >> choise;
+                if (choise == "n") {
+                    cout << "Sum: " << playerCardSum;
+                    break;
+                }
+            }
+            return playerCardSum;
+        }
+    };
+
+    class Dealer : public Cardshand
+    {
+    public:
+        int dealercards() {
+            int cardrank, cardsuit, dealerCardSum = 0;
+            system("cls");
+            cardsinit();
+            cout << "Dealer cards: ";
+        restart:
+            while (true) {
+                random_device rd;
+                mt19937 gen(rd());
+                uniform_int_distribution<> dis(0, 54);
+
+                const auto randvalue = dis(gen);
+
+                cardrank = stoi(cards[randvalue]) / 10;
+                cardsuit = stoi(cards[randvalue]) % 10;
+                cout << "[";
+                switch (cardrank)
+                {
+                case 0: goto restart;
+                case 1: cout << "Ace"; break;
+                case 2: cout << "2"; break;
+                case 3: cout << "3"; break;
+                case 4: cout << "4"; break;
+                case 5: cout << "5"; break;
+                case 6: cout << "6"; break;
+                case 7: cout << "7"; break;
+                case 8: cout << "8"; break;
+                case 9: cout << "9"; break;
+                case 10: cout << "10"; break;
+                case 11: cout << "Jack"; break;
+                case 12: cout << "Qween"; break;
+                case 13: cout << "King"; break;
+                default: break;
+                }
+                switch (cardsuit)
+                {
+                case 0: cout << " Spades"; break;
+                case 1: cout << " Hearts"; break;
+                case 2: cout << " Clubs"; break;
+                case 3: cout << " Diamonds"; break;
+                default: break;
+                }
+                cout << "], ";
+                dealerCardSum += cardrank;
+                if (dealerCardSum > 21) {
+                    cout << "Sum: " << dealerCardSum;
+                    dealerCardSum = 0;
+                    break;
+                }
+                if (dealerCardSum >= 17) {
+                    cout << "Sum: " << dealerCardSum;
+                    break;
+                }
+            }
+            return dealerCardSum;
+        }
+
+    };
+
+    public:
+    
+    void BJGame(Chips &chipsvalue)
+    {
+        int col;
+        string chips;
+
+        cout << "Введите вашу ставку" << endl;
+
+        cin >> col >> chips;
+
+        for (auto& ex : chipsvalue.chipscol)
+        {
+            if (ex.first != chips)
+            {
+                cout << "You don`t have this type of chips" << endl;
+            }
+        }
+
+        Cardshand cards;
+        Player playerlogic;
+        Dealer dealerlogic;
+        int dealerCardSum, playerCardSum;
+
+        cards.cardsinit();
+        dealerCardSum = dealerlogic.dealercards();
+        playerCardSum = playerlogic.playercards();
+
+        if (playerCardSum > dealerCardSum)
+        {
+            for (auto& ex : chipsvalue.chipscol)
+            {
+                ex.second -= col;
+                ex.second += (col * 2);
+            }
+            cout << "You Win - " << col * 2 << endl;
+        }
+        else if (playerCardSum < dealerCardSum)
+        {
+            for (auto& ex : chipsvalue.chipscol)
+            {
+                ex.second -= col;
+                if(ex.second == 0)
+                erase(chipsvalue.chipscol, ex); 
+            }
+            cout << "You Lose - " << col << endl;
+
+        }
+        else
+        {
+            for (auto& ex : chipsvalue.chipscol)
+            {
+                ex.second -= col;
+                ex.second += col;
+            }
+            cout << "Draw - You haven't lost anything" << endl;
+        }
+        
+
+    }
+};
 
 class Menu
 {
@@ -395,15 +755,15 @@ public:
     int menu(Chips& chips) 
     {
         
-        if (chips.chipscol.empty())
-        {
-            cout << "See you soon" << endl;
-            return 0;
-            
-        }
-       
         while (1)
         {
+
+            if (chips.chipscol.empty())
+            {
+                cout << "See you soon" << endl;
+                exit (0);
+
+            }
 
             cout << "Welcome to the menu\n";
 
@@ -427,7 +787,8 @@ public:
             }
             case(2):
             {
-
+                BlackJack BJ;
+                BJ.BJGame(chips);
                 break;
             }
             case(3):
@@ -501,8 +862,7 @@ int main()
 {
     setlocale(LC_ALL, "RU");
 
-
-    Roulette a;
+    Roulette roulette;
 
     Menu console;
 
@@ -513,7 +873,5 @@ int main()
     casino.chipschange();
 
     console.menu(casino);
-
-    a.Game(casino);
 
 }
