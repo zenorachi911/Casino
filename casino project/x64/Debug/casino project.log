@@ -1,7 +1,0 @@
-﻿  casino project.cpp
-C:\Users\fuzzi\source\My project\casino project\casino project.cpp(498,48): warning C4101: err: неиспользованная локальная переменная
-C:\Users\fuzzi\source\My project\casino project\casino project.cpp(568,48): warning C4101: err: неиспользованная локальная переменная
-  Source.cpp
-  Создание кода...
-C:\Users\fuzzi\source\My project\casino project\casino project.cpp(446,1): warning C4715: Roulette::Game: значение возвращается не при всех путях выполнения
-  casino project.vcxproj -> C:\Users\fuzzi\source\My project\casino project\x64\Debug\casino project.exe
